@@ -1,0 +1,3 @@
+# Defines a username scalar
+# Has to be non empty, min. 4 characters long, max. 20 characters long, no whitespaces
+scalar Username

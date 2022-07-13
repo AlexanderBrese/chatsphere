@@ -1,0 +1,13 @@
+[Unit]
+Description=OAuth2 ORY-Hydra server
+After=network-online.target
+
+[Service]
+User=chatsphere
+Group=chatsphere
+WorkingDirectory=/home/chatsphere
+ExecStart=/usr/local/bin/ory-hydra serve
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+# A particiapnt entity
+type Participant {
+  # The participant's user
+  user: User!
+  # The participant's privileges flag
+  hasPrivileges: Boolean!
+}

@@ -1,0 +1,85 @@
+extend type Query {
+  # Returns users by username
+  searchUsers(username: String!): [User]
+  # Return user by username
+  user(username: String!): User
+}
+
+extend type Mutation {
+  # Changes the avatar of a user
+  updateAvatar(updateAvatarInput: UpdateAvatarInput!): String
+  # Changes the phone number of a user
+  updatePhone(updatePhoneInput: UpdatePhoneInput!): Boolean
+  # Changes the display name of a user
+  updateDisplayName(updateDisplayNameInput: UpdateDisplayNameInput!): Boolean
+  # Changes the status of a user
+  updateStatus(updateStatusInput: UpdateStatusInput!): Boolean
+  # Reports a user
+  reportUser(reportUserInput: ReportUserInput!): Boolean
+}
+
+extend type Subscription {
+  # Fires on every user added and informs subscribers with the newly added user
+  userAdded: UserAddedEvent
+}
+
+# Input data for updating a user's avatar
+input UpdateAvatarInput {
+  # The new avatar, base64 encoded
+  avatar: String!
+  # The avatar's file name, with extension
+  fileName: String!
+}
+
+# Input data for changing a user's phone number
+input UpdatePhoneInput {
+  # TODO: Add Phone scalar
+  # new phone number (may contain non-numerical letters)
+  phone: String!
+}
+
+# Input data for updating a user's display name
+input UpdateDisplayNameInput {
+  # The new display name
+  displayName: String!
+}
+
+# Input data for updating a user's status
+input UpdateStatusInput {
+  # The new status
+  status: String!
+}
+
+# Input data for reporting a user
+input ReportUserInput {
+  # The username of a user
+  reportedUsername: String!
+  # The reason
+  reason: String!
+}
+
+# Event that signals that a new user was added
+type UserAddedEvent implements Event {
+  # The added user
+  user: User!
+  # The UserAddedEvent sender
+  sender: String!
+  # The UserAddedEvent recipients
+  recipients: [String!]!
+}
+
+# A user entity
+type User {
+  # The user's phone number
+  phone: String
+  # The date when the user was created
+  createdAt: Date
+  # The user's avatar URL
+  avatarUrl: String
+  # The user's status
+  status: String
+  # The user's display name
+  displayName: String!
+  # The user's name
+  username: String!
+}

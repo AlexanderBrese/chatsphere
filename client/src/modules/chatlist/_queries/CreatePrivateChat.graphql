@@ -1,0 +1,12 @@
+mutation createPrivateChat($createPrivateChatInput: CreatePrivateChatInput!) {
+  createPrivateChat(createPrivateChatInput: $createPrivateChatInput) {
+    id
+    stamp {
+      displayName
+      iconUrl
+    }
+    notify{
+      push
+    }
+  }
+}

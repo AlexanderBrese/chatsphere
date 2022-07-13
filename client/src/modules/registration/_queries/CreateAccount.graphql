@@ -1,0 +1,5 @@
+mutation createAccount($createAccountInput: CreateAccountInput!) {
+  createAccount(createAccountInput: $createAccountInput) {
+    token
+  }
+}

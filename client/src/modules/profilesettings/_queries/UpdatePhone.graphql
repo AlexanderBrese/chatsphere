@@ -1,0 +1,3 @@
+mutation updatePhone($updatePhoneInput: UpdatePhoneInput!) {
+  updatePhone(updatePhoneInput: $updatePhoneInput)
+}

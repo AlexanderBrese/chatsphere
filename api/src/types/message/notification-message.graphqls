@@ -1,0 +1,70 @@
+extend type Query {
+  # (Not implemented) Return a notification message by id
+  notificationMessage(id: Int!): NotificationMessage
+}
+
+extend type Mutation {
+  # adds a notification message to the chat
+  createNotificationMessage(createNotificationMessageInput: CreateNotificationMessageInput!): Boolean
+
+  # (Not implemented) updates a notification message
+  updateNotificationMessage(updateNotificationMessageInput: UpdateNotificationMessageInput!): NotificationMessage
+}
+
+extend type Subscription {
+  # User provides information to how to contact his browser vendor's push server
+  # Subsequently confirms he wants to listen to push notifications
+  notificationReceived: NotificationEvent
+}
+
+# input for creating a notification message
+input CreateNotificationMessageInput {
+  # Text contents
+  text: String!
+  # chat which this message was sent to
+  chatId: Int!
+  # holds the username (NOT! displayname to combat confusion concerning duplicates)
+  recipientName: String!
+}
+
+# input for updating a notification message
+input UpdateNotificationMessageInput {
+  # TODO
+  id: Int!
+  # TODO
+  authorId: Int!
+  # TODO
+  text: String!
+  # TODO
+  notify: NotificationInput!
+  # TODO
+  recipientId: Int!
+}
+
+# Sent to each participant of the chat that is listening currently
+type NotificationEvent implements Event {
+  # The received message
+  text: String!
+  # In which chat this message occured (to link to it)
+  chatId: Int!
+  # The sender
+  sender: String!
+  # The recipients
+  recipients: [String!]!
+}
+
+# A NotificationMessage entity
+type NotificationMessage implements Message {
+  # TODO
+  id: Int!
+  # TODO
+  author: User!
+  # TODO
+  updatedAt: Date
+  # TODO
+  text: String!
+  # TODO
+  notify: Notification!
+  # TODO
+  recipient: User!
+}

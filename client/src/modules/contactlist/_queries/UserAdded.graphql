@@ -1,0 +1,14 @@
+subscription userAdded {
+  userAdded {
+    ... on UserAddedEvent {
+      user {
+        username
+        displayName
+        status
+        avatarUrl
+      }
+    }
+    sender
+    recipients
+  }
+}

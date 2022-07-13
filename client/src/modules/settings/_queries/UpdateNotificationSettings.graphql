@@ -1,0 +1,3 @@
+mutation updateNotificationSettings($input: UpdateNotificationInput!) {
+  updateNotificationSettings(updateNotificationInput: $input)
+}

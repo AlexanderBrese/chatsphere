@@ -1,0 +1,26 @@
+extend type Query {
+  # Return a picture message by id
+  pictureMessage(id: Int!): PictureMessage
+}
+
+extend type Mutation {
+  # adds a picture message to the chat
+  createPictureMessage(createMessageInput: CreateMessageInput!): Chat
+
+  # updates a picture message
+  updatePictureMessage(updateMessageInput: UpdateMessageInput!): PictureMessage
+}
+
+# A PictureMessage entity
+type PictureMessage implements Message {
+  # TODO
+  id: Int!
+  # TODO
+  author: User!
+  # TODO
+  updatedAt: Date
+  # TODO
+  text: String!
+  # TODO
+  url: String!
+}

@@ -1,0 +1,3 @@
+mutation removeMessages($removeMessagesInput: RemoveMessagesInput!) {
+  removeMessages(removeMessagesInput: $removeMessagesInput)
+}

@@ -1,0 +1,54 @@
+extend type Mutation {
+  # Adds a contact to the account's contact list
+  createContact(createContactInput: CreateContactInput!): Contact
+  # Changes the nickname of a contact
+  updateNickname(updateNicknameInput: UpdateNicknameInput!): Boolean
+  # Removes a contact from the account's contact list
+  removeContact(removeContactInput: RemoveContactInput!): Boolean
+  # Adds a contact to the account's block list
+  blockContact(blockContactInput: BlockContactInput!): Boolean
+  # Removes a contact from the account's block list
+  unblockContact(unblockContactInput: UnblockContactInput!): Boolean
+}
+
+# Input data for updating a contact's nickname
+input UpdateNicknameInput {
+  # The contact's username
+  contactUsername: String!
+  # The new nickname
+  nickname: String!
+}
+
+# Input data for creating a new contact
+input CreateContactInput {
+  # The contact's username
+  contactUsername: String!
+}
+
+# Input data for removing a contact
+input RemoveContactInput {
+  # The contact's username
+  contactUsername: String!
+}
+
+# Input data for blocking a contact
+input BlockContactInput {
+  # The contact's username
+  contactUsername: String!
+}
+
+# Input data for unblocking a contact
+input UnblockContactInput {
+  # The contact's username
+  contactUsername: String!
+}
+
+# A contact entity
+type Contact {
+  # The contact's user
+  user: User!,
+  # The contact's nickname
+  nickname: String
+  # The date when the contact was created
+  createdAt: Date
+}

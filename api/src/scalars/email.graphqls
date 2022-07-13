@@ -1,0 +1,3 @@
+# Defines an email scalar
+# RFC validated email
+scalar Email

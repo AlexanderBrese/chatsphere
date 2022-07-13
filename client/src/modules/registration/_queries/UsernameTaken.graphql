@@ -1,0 +1,3 @@
+query usernameTaken($username: String!) {
+  usernameTaken(username: $username)
+}

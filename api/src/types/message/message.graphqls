@@ -1,0 +1,81 @@
+extend type Mutation {
+  # Removes message(s)
+  removeMessages(removeMessagesInput: RemoveMessagesInput!): Boolean,
+}
+
+extend type Subscription {
+  # Fires on any message added and informs subscribers with the newly added message
+  messageAdded(subscriptionInput: SubscriptionInput): MessageAddedEvent,
+  # Fires on any message removed and informs subscribers with the removed message
+  messageRemoved(subscriptionInput: SubscriptionInput!): MessageRemovedEvent
+  # Fires on any message updated and informs subscribers with the updated message
+  messageUpdated(subscriptionInput: SubscriptionInput!): MessageUpdatedEvent
+}
+
+# Input data for creating any type of message
+input CreateMessageInput {
+  # The message content (plain message) / description (other message types)
+  text: String!
+  # The file name with ending (in case of plain message leave blank)
+  fileName: String
+  # The base64 encoded attachement (in case of plain message leave blank)
+  encoded: String
+  # The chat's ID
+  chatId: Int!
+}
+
+# Input data for updating the content / description any type of message
+input UpdateMessageInput {
+  # The message's ID
+  messageId: Int!
+  # The message content (plain message) / description (other message types)
+  text: String!
+}
+
+# Input data for removing any type of message
+input RemoveMessagesInput {
+  # The message ID's
+  messageIds: [Int!]!
+}
+
+# Event that signals that a message was removed
+type MessageRemovedEvent implements Event {
+  # The removed message's ID
+  messageId: Int!
+  # The MessageRemovedEvent sender
+  sender: String!
+  # The MessageRemovedEvent recipients
+  recipients: [String!]!
+}
+
+# Event that signals that a message was updated
+type MessageUpdatedEvent implements Event {
+  # The updated message
+  message: Message!
+  # The MessageUpdatedEvent sender
+  sender: String!
+  # The MessageUpdatedEvent recipients
+  recipients: [String!]!
+}
+
+# Event that signals that a message was added
+type MessageAddedEvent implements Event {
+  # The added message
+  message: Message!
+  # The MessageAddedEvent sender
+  sender: String!
+  # The MessageAddedEvent recipients
+  recipients: [String!]!
+}
+
+# A message entity #
+interface Message {
+  # The message's ID
+  id: Int!
+  # The message's author
+  author: User!
+  # The date when the message was updated
+  updatedAt: Date
+  # The message content (plain message) / description (other message types)
+  text: String!
+}

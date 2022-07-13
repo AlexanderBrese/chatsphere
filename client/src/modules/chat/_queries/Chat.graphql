@@ -1,0 +1,25 @@
+query chat($id: Int!) {
+  chat(id: $id) {
+    id
+    participants {
+      user {
+        username
+        displayName
+      }
+    }
+    log {
+      id
+      author {
+        username
+        displayName
+        status
+        avatarUrl
+      }
+      updatedAt
+      text
+    }
+    stamp {
+      displayName
+    }
+  }
+}

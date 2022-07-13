@@ -1,0 +1,10 @@
+subscription notificationReceived {
+  notificationReceived {
+    ... on NotificationEvent {
+      text
+      chatId
+    }
+    sender
+    recipients
+  }
+}

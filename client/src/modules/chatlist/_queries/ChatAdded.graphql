@@ -1,0 +1,27 @@
+subscription chatAdded {
+  chatAdded {
+    ... on ChatAddedEvent {
+      chat {
+        id
+        stamp{
+          displayName
+          iconUrl
+          lastMessage{
+            id
+            author{
+              displayName
+              status
+            }
+            updatedAt
+            text
+          }
+        }
+        notify{
+          push
+        }
+      }
+    }
+    sender
+    recipients
+  }
+}

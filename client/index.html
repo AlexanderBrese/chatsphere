@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>chatsphere</title>
+    <link rel="shortcut icon" type="image/x-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon.ico">
+    <link rel="icon" type="image/gif" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon.gif">
+    <link rel="icon" type="image/png" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon.png">
+    <link rel="icon" type="image/png" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-196x196.png" sizes="196x196">
+    <!--[if IE]><link rel="shortcut icon" href="/static/img/icons/favicon.ico"><![endif]-->
+    <!-- Add to home screen for Android and modern mobile browsers -->
+    <link rel="manifest" href="<%= htmlWebpackPlugin.files.publicPath %>static/manifest.json">
+    <meta name="theme-color" content="#4DBA87">
+
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Chatsphere">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-57x57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-60x60.png" sizes="60x60">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-72x72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-76x76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-114x114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-120x120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-128x128.png" sizes="128x128">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-144x144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-152x152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-180x180.png" sizes="180x180">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-precomposed.png">
+    <link rel="mask-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/safari-pinned-tab.svg" color="#4DBA87">
+
+      <!-- Add to home screen for Windows -->
+    <meta name="msapplication-TileImage" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/win8-tile-144x144.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-navbutton-color" content="#ffffff">
+    <meta name="application-name" content="Chatsphere"/>
+    <meta name="msapplication-tooltip" content="Chatsphere"/>
+    <meta name="msapplication-square70x70logo" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/win8-tile-70x70.png">
+    <meta name="msapplication-square144x144logo" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/win8-tile-144x144.png">
+    <meta name="msapplication-square150x150logo" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/win8-tile-150x150.png">
+    <meta name="msapplication-wide310x150logo" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/win8-tile-310x150.png">
+    <meta name="msapplication-square310x310logo" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/win8-tile-310x310.png">
+
+    <% for (var chunk of webpack.chunks) {
+        for (var file of chunk.files) {
+          if (file.match(/\.(js|css)$/)) { %>
+    <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
+  </head>
+  <body>
+    <noscript>
+      This is your fallback content in case JavaScript fails to load.
+    </noscript>
+    <div id="app"></div>
+    <!-- Todo: only include in production -->
+    <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

@@ -1,0 +1,11 @@
+<configuration>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="colorAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>%d %green([%thread]) %highlight(%level %logger{20} - %msg%n)</pattern>
+    </encoder>
+  </appender>
+
+  <root level="warn">
+    <appender-ref ref="colorAppender"/>
+  </root>
+</configuration>

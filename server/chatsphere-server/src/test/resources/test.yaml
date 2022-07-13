@@ -1,0 +1,6 @@
+some:
+  string: value1
+  array: [1, 2, 3]
+  object:
+    attr1: value1
+    attr2: [iris, jasmine, kiwi]

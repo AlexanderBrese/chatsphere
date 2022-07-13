@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "ChatSphere": {
+      "schemaPath": "schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "remote": {
+            "url": "https://api.chatsphere.de/graphql",
+            "subscription": "wss://api.chatsphere.de/graphql"
+          },
+          "local": "http://localhost:6060/graphql"
+        }
+      }
+    }
+  }
+}

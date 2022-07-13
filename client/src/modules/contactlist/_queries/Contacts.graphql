@@ -1,0 +1,12 @@
+query contacts {
+  account {
+    contacts {
+      user {
+        username
+        displayName
+        status
+        avatarUrl
+      }
+    }
+  }
+}

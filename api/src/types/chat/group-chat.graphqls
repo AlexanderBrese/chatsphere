@@ -1,0 +1,92 @@
+extend type Mutation {
+  # Adds a group chat to the chat list
+  createGroupChat(createGroupChatInput: CreateGroupChatInput!): GroupChat
+  # Adds a particpant to a group chat
+  addParticipant(addParticipantInput: AddParticipantInput): Boolean
+  # Removes a particpant from a group chat
+  removeParticipant(removeParticipantInput: RemoveParticipantInput): Boolean
+  # Changes the name of a group chat
+  updateName(updateNameInput: UpdateNameInput): Boolean
+  # Changes the picture of a group chat
+  updatePicture(updatePictureInput: UpdatePictureInput): Boolean
+  # Adds a new administrator to a group chat
+  grantPrivileges(grantPrivilegesInput: GrantPrivilegesInput): Boolean
+  # Removes an administrator from a group chat
+  revokePrivileges(revokePrivilegesInput: RevokePrivilegesInput): Boolean
+}
+
+# Input data for creating a group chat
+input CreateGroupChatInput {
+  # The participant usernames
+  participantUsernames: [String!]!
+  # The group chat's display name
+  displayName: String!
+  # The group chat's icon base64 encoded
+  icon: String
+  # The file name of the icon
+  fileName: String
+}
+
+# Input data for adding a participant to a group chat
+input AddParticipantInput {
+  # The participant's username
+  participantUsername: String!
+  # The group chat's ID
+  chatId: Int!
+}
+
+# Input data for removing a participant from a group chat
+input RemoveParticipantInput {
+  # The participant's username
+  participantUsername: String!
+  # The group chat's ID
+  chatId: Int!
+}
+
+# Input data for updating a group chat's display name
+input UpdateNameInput {
+  # The group chat's ID
+  chatId: Int!
+  # The modified display name
+  displayName: String!
+}
+
+# Input data for updating a group chat's picture
+input UpdatePictureInput {
+  # The group chat's ID
+  chatId: Int!
+  # The modified picture
+  picture: String!
+}
+
+# Input data for adding an administrator to a group chat
+input GrantPrivilegesInput {
+  # The group chat's ID
+  chatId: Int!
+  # The participant's username
+  participantUsername: String!
+}
+
+# Input data for removing an administrator from a group chat
+input RevokePrivilegesInput {
+  # The group chat's ID
+  chatId: Int!
+  # The participant's username
+  participantUsername: String!
+}
+
+# A group chat entity
+type GroupChat implements Chat {
+  # The group chat's ID
+  id: Int!
+  # The group chat's participants
+  participants: [Participant!]!
+  # The group chat's message log sorted by Date in ascending order
+  log: [Message]
+  # The group chat's notification settings
+  notify: Notification!
+  # The group chat's stamp
+  stamp: ChatStamp
+  # The group chat's public setting
+  isPublic: Boolean!
+}

@@ -1,0 +1,26 @@
+extend type Query {
+  # Returns a video message by id
+  videoMessage(id: Int!): VideoMessage
+}
+
+extend type Mutation {
+  # Adds a video message to the chat
+  createVideoMessage(createMessageInput: CreateMessageInput!): VideoMessage
+
+  # Updates a video message
+  updateVideoMessage(updateMessageInput: UpdateMessageInput!): Boolean
+}
+
+# A video message entity
+type VideoMessage implements Message {
+  # The video message's ID
+  id: Int!
+  # The video message's author
+  author: User!
+  # The date when the video message was updated
+  updatedAt: Date
+  # The video message's description
+  text: String!
+  # The video message's video URL
+  url: String!
+}

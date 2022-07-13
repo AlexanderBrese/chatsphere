@@ -1,0 +1,80 @@
+extend type Query {
+  # Returns a chat by its ID
+  chat(id: Int): Chat
+  # Return all chats, this user is participating in with `name` as prefix #
+  searchChat(name: String!): [Chat]
+}
+
+extend type Mutation {
+  # Changes a chat's notification settings
+  updateChatNotificationSettings(updateChatNotificationSettingsInput: UpdateChatNotificationSettingsInput!): Boolean
+  # Leaves group chat(s) / Removes private chat(s)
+  leaveChats(leaveChatsInput: LeaveChatsInput!): Boolean
+}
+
+extend type Subscription {
+  # Fires on every chat added and informs subscribers with the newly added chat
+  chatAdded: ChatAddedEvent
+  # Fires on every group chat left and informs subscribers with the modified chat
+  chatLeft: ChatLeftEvent
+  # Fires on every message modification and informs subscribes with the modified chat
+  chatModified: ChatModifiedEvent
+}
+
+# Input data for updating a chat's notification settings
+input UpdateChatNotificationSettingsInput {
+  # The chat's ID
+  chatId: Int!
+  # The notification settings
+  notify: NotificationInput
+}
+
+# Input for leaving/removing chat(s)
+input LeaveChatsInput {
+  # The chat ID's
+  chatIds: [Int!]!
+}
+
+# Event that signals that a group chat was left
+type ChatLeftEvent implements Event {
+  # The modified chat
+  chat: Chat!
+  # The ChatLeftEvent sender
+  sender: String!
+  # The ChatLeftEvent recipients
+  recipients: [String!]!
+}
+
+# Event that signals that a chat was modified
+type ChatModifiedEvent implements Event {
+  # The modified chat
+  chat: Chat!
+  # The ChatAddedEvent sender
+  sender: String!
+  # The ChatAddedEvent recipients
+  recipients: [String!]!
+}
+
+# Event that signals that a chat was added
+type ChatAddedEvent implements Event {
+  # The added chat
+  chat: Chat!
+  # The ChatAddedEvent sender
+  sender: String!
+  # The ChatAddedEvent recipients
+  recipients: [String!]!
+}
+
+# A chat entity
+interface Chat {
+  # The chat's ID
+  id: Int!
+  # The chat's participants
+  participants: [Participant!]!
+  # The chat's message log sorted by Date in ascending order
+  log: [Message]
+  # The chat's notification settings
+  notify: Notification
+  # The chat's stamp
+  stamp: ChatStamp
+}

@@ -1,0 +1,272 @@
+stages:
+  - systeminfo
+  - prepare
+  - lint
+  - test
+  - build
+  - deploy
+  - integration
+  - docs
+
+# Secret Vars NODE_API_DOC
+# Secret Vars MYSQL_HOST; MYSQL_DATABASE; MYSQL_USER; MYSQL_PASSWORD
+# Secret Vars JETTY_WEBAPPS_DIR
+
+variables:
+  GIT_STRATEGY: fetch
+  GIT_DEPTH: "10"
+
+systeminfo:
+  stage: systeminfo
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "Running as" $(whoami)":"$(echo $HOME)
+    - echo $(which git) $(git --version)
+    - echo $(which node) $(node --version)
+    - echo $(which yarn) $(yarn --version)
+    - echo $(which chromium) $(chromium --version)
+    - echo $(which firefox) $(firefox --version)
+    - echo $(which java) $(java -version | head -n 1)
+    - echo $(which mvn) $(mvn --version | head -n 1)
+    - echo $(which mariadb) $(mariadb --version)
+
+backend-download-dependencies:
+    stage: prepare
+    script:
+      - (cd server && mvn compile dependency:resolve)
+
+backend-checkstyle:
+  stage: lint
+  script:
+    - (cd server && mvn compile checkstyle:check)
+
+backend-unit-test:
+  stage: test
+  script:
+    - (cd server && mvn -P withoutPitHistory test org.pitest:pitest-maven:mutationCoverage && mvn cobertura:cobertura)
+  coverage: '/>> Generated \d+ mutations Killed \d+ \((\d+)%\)/'
+
+backend-package:
+  stage: build
+  script:
+    - (cd server && mvn package)
+  artifacts:
+    name: "GraphQL Server Servlet $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    paths:
+      - server/chatsphere-server/target/*.jar
+      - server/chatsphere-server/target/*.war
+    expire_in: 1 week
+
+backend-deploy:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - develop
+  script:
+    - (cd server/chatsphere-server/target/ && mv -v *.war $JETTY_WEBAPPS_DIR/root.war)
+  dependencies:
+    - backend-package
+
+backend-docs:
+  stage: docs
+  only:
+    - develop
+  script:
+    - (cd server && mvn compile org.pitest:pitest-maven:mutationCoverage -P withoutPitHistory)
+    - (cd server && mvn site)
+    - rm -v -f -R ~/report.chatsphere.de/backend/*
+    - cp -v -f -R server/chatsphere-server/target/site/* ~/report.chatsphere.de/backend
+  artifacts:
+    name: "GraphQL Server Report $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    paths:
+      - server/chatsphere-server/target/site/*
+    expire_in: 12 weeks
+
+api-download-dependencies:
+  stage: prepare
+  script:
+    - (cd api && yarn install)
+  cache:
+    key: api
+    paths:
+      - api/node_modules
+    policy: pull-push
+
+api-eslint:
+  stage: lint
+  script:
+    - (cd api && yarn run lint)
+  cache:
+    key: api
+    paths:
+      - api/node_modules
+    policy: pull
+
+# FIXME: Missing api-build stage
+
+api-deploy:
+  stage: deploy
+  only:
+    - develop
+  tags:
+    - NODE_API_DOC
+  script:
+    - (cp -v -f -R api/src/* ~/docs.chatsphere.de/src/)
+
+api-docs:
+  stage: docs
+  only:
+    - develop
+  tags:
+    - NODE_API_DOC
+  script:
+    - (cd api && yarn run docs)
+    - rm -v -f -R ~/report.chatsphere.de/api/*
+    - cp -v -f -R api/docs/* ~/report.chatsphere.de/api/
+  cache:
+    key: api
+    paths:
+      - api/node_modules
+    policy: pull
+  artifacts:
+    name: "API Documentation $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    paths:
+      - api/docs/*
+    expire_in: 12 weeks
+
+frontend-download-dependencies:
+  stage: prepare
+  script:
+    - (cd client && yarn install)
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull-push
+
+frontend-eslint:
+  stage: lint
+  script:
+    - (cd client && yarn run lint)
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull
+
+frontend-unit-test:
+  stage: test
+  script:
+    - (cd client && yarn run unit)
+  coverage: '/Lines\s+: (\d+\.\d+)%/'
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull
+
+frontend-build:
+  stage: build
+  script:
+    - (cd client && yarn run build)
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull
+  artifacts:
+    name: "Frontend Distribution $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    paths:
+      - client/dist/*
+    expire_in: 1 week
+
+frontend-deploy:
+  stage: deploy
+  variables:
+   GIT_STRATEGY: none
+  only:
+    - develop
+  script:
+    - rm -v -f -R ~/chatsphere.de/*
+    - cp -v -f -R client/dist/* ~/chatsphere.de/
+  dependencies:
+    - frontend-build
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull
+
+frontend-integration:
+  stage: integration
+  script:
+    - (cd client && yarn run e2e)
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull
+  artifacts:
+    name: "E2E Report $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    paths:
+      - client/test/e2e/reports/*
+    expire_in: 1 weeks
+
+# FIXME: Repeated Unit-Test Runner
+frontend-coverage:
+  stage: docs
+  only:
+    - develop
+  script:
+    - (cd client && yarn unit)
+    - rm -v -f -R ~/report.chatsphere.de/client/report/*
+    - cp -v -f -R client/test/unit/coverage/lcov-report/* ~/report.chatsphere.de/client/report/
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull
+  artifacts:
+    name: "Frontend Coverage Report $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    paths:
+      - client/test/unit/coverage/lcov-report/*
+    expire_in: 12 weeks
+
+frontend-docs:
+  stage: docs
+  only:
+    - develop
+  script:
+    - (cd client && yarn docs)
+    - rm -v -f -R ~/report.chatsphere.de/client/docs/*
+    - cp -v -f -R client/docs/* ~/report.chatsphere.de/client/docs/
+  cache:
+    key: client
+    paths:
+      - client/node_modules
+    policy: pull
+  artifacts:
+    name: "Frontend Documentation $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    paths:
+      - client/docs/*
+    expire_in: 12 weeks
+
+
+database-deploy-test:
+  stage: prepare
+  script:
+  - (cd database && mysql --host=$MYSQL_TEST_HOST --user=$MYSQL_TEST_USER --password=$MYSQL_TEST_PASSWORD --database=$MYSQL_TEST_DATABASE < chatsphere_cleanup.sql)
+  - (cd database && mysql --host=$MYSQL_TEST_HOST --user=$MYSQL_TEST_USER --password=$MYSQL_TEST_PASSWORD --database=$MYSQL_TEST_DATABASE < chatsphere_schema.sql)
+
+database-deploy:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - (cd database && mysql --host=$MYSQL_HOST --user=$MYSQL_USER --password=$MYSQL_PASSWORD --database=$MYSQL_DATABASE < chatsphere_cleanup.sql)
+    - (cd database && mysql --host=$MYSQL_HOST --user=$MYSQL_USER --password=$MYSQL_PASSWORD --database=$MYSQL_DATABASE < chatsphere_schema.sql)
+    - (cd database && mysql --host=$MYSQL_HOST --user=$MYSQL_USER --password=$MYSQL_PASSWORD --database=$MYSQL_DATABASE < hydra.sql)
+    - (cd database && mysql --host=$MYSQL_HOST --user=$MYSQL_USER --password=$MYSQL_PASSWORD --database=$MYSQL_DATABASE < mocks.sql)
+

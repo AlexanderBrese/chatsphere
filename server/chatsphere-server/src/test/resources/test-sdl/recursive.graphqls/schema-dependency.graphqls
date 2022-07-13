@@ -1,0 +1,44 @@
+# Docs
+type Link {
+  # Docs
+  id: Int!
+  # Docs
+  url: String!
+  # Docs
+  description: String!
+}
+
+# Docs
+input CreateLinkInput {
+  # Docs
+  url: String!
+  # Docs
+  description: String!
+}
+
+
+# Docs
+input SubscriptionInput {
+  # Docs
+  channelName: String!
+  # Docs
+  channelId: String!
+}
+
+# Docs
+type LinkAddedEvent implements Event {
+  # Docs
+  link: Link!
+  # Docs
+  sender: String!
+  # Docs
+  recipient: String!
+}
+
+# Docs
+interface Event {
+  # Docs
+  sender: String!
+  # Docs
+  recipient: String!
+}

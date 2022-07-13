@@ -1,0 +1,24 @@
+extend type Query {
+  # Returns a plain message by id
+  plainMessage(id: Int!): PlainMessage
+}
+
+extend type Mutation {
+  # Adds a plain message to the chat
+  createPlainMessage(createMessageInput: CreateMessageInput!): PlainMessage
+
+  # Updates a plain message
+  updatePlainMessage(updateMessageInput: UpdateMessageInput!): Boolean
+}
+
+# A plain message entity
+type PlainMessage implements Message {
+  # The plain message's ID
+  id: Int!
+  # The plain message's author
+  author: User!
+  # The date when the plain message was updated
+  updatedAt: Date
+  # The plain message's description
+  text: String!
+}

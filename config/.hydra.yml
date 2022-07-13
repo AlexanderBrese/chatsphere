@@ -1,0 +1,14 @@
+HOST: localhost
+HTTPS_ALLOW_TERMINATION_FROM: 127.0.0.1/32
+HYDRA_URL: https://auth.chatsphere.de/
+DATABASE_URL: mysql://chatsphere:QJUE2TiaxoovgqCV@/chatsphere?parseTime=true
+OAUTH2_ISSUER_URL: https://auth.chatsphere.de
+OAUTH2_LOGIN_URL: https://chatsphere.de/oauth2/login
+OAUTH2_CONSENT_URL: https://chatsphere.de/oauth2/consent
+OAUTH2_ERROR_URL: https://chatsphere.de/oauth2/error
+SYSTEM_SECRET: -----TODOChooseASecret------
+COOKIE_SECRET: -----TODOChooseASecret------
+AUTH_CODE_LIFESPAN: 15m
+CHALLENGE_TOKEN_LIFESPAN: 15m
+ID_TOKEN_LIFESPAN: 30m
+ACCESS_TOKEN_LFIESPAN: 30m

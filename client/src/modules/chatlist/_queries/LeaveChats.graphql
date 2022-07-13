@@ -1,0 +1,3 @@
+mutation leaveChats($leaveChatsInput: LeaveChatsInput!) {
+  leaveChats(leaveChatsInput: $leaveChatsInput)
+}

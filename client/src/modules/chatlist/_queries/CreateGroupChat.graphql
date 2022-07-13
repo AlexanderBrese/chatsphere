@@ -1,0 +1,21 @@
+mutation createGroupChat($createGroupChatInput: CreateGroupChatInput!) {
+  createGroupChat(createGroupChatInput: $createGroupChatInput) {
+    id
+    stamp {
+      displayName
+      iconUrl
+      lastMessage {
+        id
+        author{
+          displayName
+          status
+        }
+        updatedAt
+        text
+      }
+    }
+    notify{
+      push
+    }
+  }
+}

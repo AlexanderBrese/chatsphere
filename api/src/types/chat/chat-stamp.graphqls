@@ -1,0 +1,9 @@
+# A chat stamp entity
+type ChatStamp {
+  # The icon URL
+  iconUrl: String!
+  # The chat's display name
+  displayName: String!
+  # The chat's last message
+  lastMessage: Message
+}

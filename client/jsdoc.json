@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    "node_modules/jsdoc-vuejs"
+  ],
+  "source": {
+      "include": ["src/"],
+      "includePattern": ".+\\.(js|vue)$",
+      "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "opts": {
+    "destination": "docs/",
+    "template": "node_modules/docdash"
+  }
+  
+}
+

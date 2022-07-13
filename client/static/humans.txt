@@ -1,0 +1,1 @@
+ChatSphere is an instant messaging platform designed as a real-time progressive web application developed as a PSE project by students at KIT.

@@ -1,0 +1,21 @@
+# A notification entity
+type Notification {
+  # The notification's preference
+  push: NotificationPreference
+}
+
+# Input data for setting a notification's preference
+input NotificationInput {
+  # The notification's setting
+  push: NotificationPreference
+}
+
+# A notification preference entity
+enum NotificationPreference {
+  # Notification's preference shall be inherited
+  INHERIT
+  # Notification shall be muted
+  MUTE
+  # Notification shall be notified
+  NOTIFY
+}

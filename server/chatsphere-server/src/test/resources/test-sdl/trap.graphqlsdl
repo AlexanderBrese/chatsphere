@@ -1,0 +1,11 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+""" Seems to be valid """
+type Query {
+  # Docs
+  door: [Trap]
+}

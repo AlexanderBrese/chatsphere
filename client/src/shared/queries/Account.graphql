@@ -1,0 +1,15 @@
+query account {
+  account {
+    notify {
+      push
+    }
+    user {
+      username
+      avatarUrl
+      displayName
+      status
+      phone
+    }
+    email
+  }
+}

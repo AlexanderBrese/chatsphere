@@ -1,0 +1,3 @@
+mutation updateChatNotificationSettings($updateChatNotificationSettingsInput: UpdateChatNotificationSettingsInput!) {
+  updateChatNotificationSettings(updateChatNotificationSettingsInput: $updateChatNotificationSettingsInput)
+}

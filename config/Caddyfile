@@ -1,0 +1,527 @@
+# Dependencies:
+# ORY-HYDRA localhost:4444
+# DOCS localhost:3000
+# JETTY localhost:6060
+
+chatsphere.de {
+   
+    # Let's Encrypt TLS Certificate
+    tls niklas@seyfarth.de {
+            alpn h2 # Allow only HTTP 2.0
+            curves X25519 p521 p384 p256
+            ciphers ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-CBC-SHA
+            must_staple
+    }
+
+    # HTTP 2.0 Server Push via HTTP Link Header
+    push
+
+    header / {
+        # Enable HTTP Strict Transport Security (HSTS) to force clients to always
+        # connect via HTTPS (do not use if only testing)
+        Strict-Transport-Security "max-age=31536000; includeSubdomains"
+
+        # Enable cross-site filter (XSS) and tell browser to block detected attacks
+        X-XSS-Protection "1; mode=block; report=https://aginmo.report-uri.com/r/d/xss/enforce"
+
+        # Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+        X-Content-Type-Options "nosniff"
+
+        # Disallow the site to be rendered within a frame (clickjacking protection)
+        X-Frame-Options "SAMEORIGIN"
+
+        # Only send full http referer on same origin
+        Referrer-Policy "same-origin"
+
+        # Expect Certificate Transparency
+        Expect-CT "max-age=86400, enforce, report-uri=\"https://aginmo.report-uri.com/r/d/ct/enforce\""
+
+        # Expect OSCP must-staple certificate
+        Expect-Staple "max-age=86400; report-uri=\"https://aginmo.report-uri.com/r/d/staple/enforce\""
+
+        # Let's Encrypt HKPK + Let's Encrypt Backup
+        Public-Key-Pins "pin-sha256=\"YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=\"; pin-sha256=\"sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=\"; max-age=86400; includeSubDomains; report-uri=\"https://aginmo.report-uri.com/r/d/hpkp/enforce\""
+
+        # CSP
+        Content-Security-Policy "default-src 'self' ; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' data: cdn.chatsphere.de; media-src cdn.chatsphere.de; font-src 'self' fonts.gstatic.com; worker-src 'self'; connect-src 'self' wss://api.chatsphere.de; report-uri https://aginmo.report-uri.com/r/d/csp/enforce"
+    }
+ 
+    root /var/www/chatsphere.de
+    
+    fastcgi / /run/php/php7.0-fpm.sock php
+
+    # PWA History Mode
+    rewrite {
+        regexp .*
+        to {path} /
+    }
+    
+    gzip
+    
+    errors stderr {
+        400 /usr/share/caddy/errors/HTTP400.html
+        401 /usr/share/caddy/errors/HTTP401.html
+        403 /usr/share/caddy/errors/HTTP403.html
+        404 /usr/share/caddy/errors/HTTP404.html
+        500 /usr/share/caddy/errors/HTTP500.html
+        501 /usr/share/caddy/errors/HTTP501.html
+        502 /usr/share/caddy/errors/HTTP502.html
+        503 /usr/share/caddy/errors/HTTP503.html
+        * /usr/share/caddy/errors/HTTP503.html
+    }
+    
+    log / stdout "[{when_iso}] \"{method} chatsphere.de{uri} {proto}\" {status} {size}"
+    
+    timeouts {
+        read 2m
+        header 30s
+        write none
+        idle 2h
+    }
+}
+
+www.chatsphere.de {
+   
+    # Let's Encrypt TLS Certificate
+    tls niklas@seyfarth.de {
+            alpn h2 # Allow only HTTP 2.0
+            curves X25519 p521 p384 p256
+            ciphers ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-CBC-SHA
+            must_staple
+    }
+
+    # HTTP 2.0 Server Push via HTTP Link Header
+    push
+
+    header / {
+        # Enable HTTP Strict Transport Security (HSTS) to force clients to always
+        # connect via HTTPS (do not use if only testing)
+        Strict-Transport-Security "max-age=31536000; includeSubdomains"
+
+        # Enable cross-site filter (XSS) and tell browser to block detected attacks
+        X-XSS-Protection "1; mode=block; report=https://aginmo.report-uri.com/r/d/xss/enforce"
+
+        # Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+        X-Content-Type-Options "nosniff"
+
+        # Disallow the site to be rendered within a frame (clickjacking protection)
+        X-Frame-Options "SAMEORIGIN"
+
+        # Only send full http referer on same origin
+        Referrer-Policy "same-origin"
+
+        # Expect Certificate Transparency
+        Expect-CT "max-age=86400, enforce, report-uri=\"https://aginmo.report-uri.com/r/d/ct/enforce\""
+
+        # Expect OSCP must-staple certificate
+        Expect-Staple "max-age=86400; report-uri=\"https://aginmo.report-uri.com/r/d/staple/enforce\""
+
+        # Let's Encrypt HKPK + Let's Encrypt Backup
+        Public-Key-Pins "pin-sha256=\"YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=\"; pin-sha256=\"sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=\"; max-age=86400; includeSubDomains; report-uri=\"https://aginmo.report-uri.com/r/d/hpkp/enforce\""
+
+        # CSP
+        Content-Security-Policy "style-src 'unsafe-inline' ; report-uri https://aginmo.report-uri.com/r/d/csp/enforce"
+    }
+ 
+    redir / https://chatsphere.de{uri} 308
+
+    root /var/www/chatsphere.de
+    
+    errors stderr {
+        400 /usr/share/caddy/errors/HTTP400.html
+        401 /usr/share/caddy/errors/HTTP401.html
+        403 /usr/share/caddy/errors/HTTP403.html
+        404 /usr/share/caddy/errors/HTTP404.html
+        500 /usr/share/caddy/errors/HTTP500.html
+        501 /usr/share/caddy/errors/HTTP501.html
+        502 /usr/share/caddy/errors/HTTP502.html
+        503 /usr/share/caddy/errors/HTTP503.html
+        * /usr/share/caddy/errors/HTTP503.html
+    }
+    
+    log / stdout "[{when_iso}] \"{method} chatsphere.de{uri} {proto}\" {status} {size}"
+    
+    timeouts {
+        read 2m
+        header 30s
+        write none
+        idle 2h
+    }
+}
+
+cdn.chatsphere.de {
+   
+    # Let's Encrypt TLS Certificate
+    tls niklas@seyfarth.de {
+            alpn h2 # Allow only HTTP 2.0
+            curves X25519 p521 p384 p256
+            ciphers ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-CBC-SHA
+            must_staple
+    }
+
+    # HTTP 2.0 Server Push via HTTP Link Header
+    push
+
+    header / {
+        # Enable HTTP Strict Transport Security (HSTS) to force clients to always
+        # connect via HTTPS (do not use if only testing)
+        Strict-Transport-Security "max-age=31536000; includeSubdomains"
+
+        # Enable cross-site filter (XSS) and tell browser to block detected attacks
+        X-XSS-Protection "1; mode=block; report=https://aginmo.report-uri.com/r/d/xss/enforce"
+
+        # Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+        X-Content-Type-Options "nosniff"
+
+        # Disallow the site to be rendered within a frame (clickjacking protection)
+        X-Frame-Options "SAMEORIGIN"
+
+        # Only send full http referer on same origin
+        Referrer-Policy "same-origin"
+
+        # Expect Certificate Transparency
+        Expect-CT "max-age=86400, enforce, report-uri=\"https://aginmo.report-uri.com/r/d/ct/enforce\""
+
+        # Expect OSCP must-staple certificate
+        Expect-Staple "max-age=86400; report-uri=\"https://aginmo.report-uri.com/r/d/staple/enforce\""
+
+        # Let's Encrypt HKPK + Let's Encrypt Backup
+        Public-Key-Pins "pin-sha256=\"YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=\"; pin-sha256=\"sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=\"; max-age=86400; includeSubDomains; report-uri=\"https://aginmo.report-uri.com/r/d/hpkp/enforce\""
+
+        # CSP
+        Content-Security-Policy "style-src 'unsafe-inline' ; report-uri https://aginmo.report-uri.com/r/d/csp/enforce"
+    }
+ 
+    root /var/www/cdn.chatsphere.de
+
+    # FileStorage Mapping
+    
+
+    # Whitelist Mime-Types
+    # INPUT: /application/octet-stream/BEBC6D49AE317069F06FDA644A08E01C65A894AE94250CC273032DAF28AB4CC2
+    # OUTPUT: /BEBC6D49AE317069F06FDA644A08E01C65A894AE94250CC273032DAF28AB4CC2?mime=application/octet-stream
+    rewrite {
+        r ^\/(application\/(octet-stream)|image\/(jpeg|png|gif|webp|svg\+xml)|audio\/(mpeg|aac|ogg|wav|webm)|video\/(mp4|webm|ogg))(.+)$
+        to {6}?mime={1}
+    }
+
+    # Construct MIME-Type
+    header / "Content-Type" {?mime}
+
+    # File to load: "/BEBC6D49AE317069F06FDA644A08E01C65A894AE94250CC273032DAF28AB4CC2"
+
+    cors / {
+        origin https://chatsphere.de
+        methods GET
+        max_age 86400
+    }
+    
+    errors stderr {
+        400 /usr/share/caddy/errors/HTTP400.html
+        401 /usr/share/caddy/errors/HTTP401.html
+        403 /usr/share/caddy/errors/HTTP403.html
+        404 /usr/share/caddy/errors/HTTP404.html
+        500 /usr/share/caddy/errors/HTTP500.html
+        501 /usr/share/caddy/errors/HTTP501.html
+        502 /usr/share/caddy/errors/HTTP502.html
+        503 /usr/share/caddy/errors/HTTP503.html
+        * /usr/share/caddy/errors/HTTP503.html
+    }
+    
+    log / stdout "[{when_iso}] \"{method} chatsphere.de{uri} {proto}\" {status} {size}"
+    
+    timeouts {
+        read 2m
+        header 30s
+        write none
+        idle 2h
+    }
+}
+
+report.chatsphere.de {
+   
+    # Let's Encrypt TLS Certificate
+    tls niklas@seyfarth.de {
+            alpn h2 # Allow only HTTP 2.0
+            curves X25519 p521 p384 p256
+            ciphers ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-CBC-SHA
+            must_staple
+    }
+
+    # HTTP 2.0 Server Push via HTTP Link Header
+    push
+
+    header / {
+        # Enable HTTP Strict Transport Security (HSTS) to force clients to always
+        # connect via HTTPS (do not use if only testing)
+        Strict-Transport-Security "max-age=31536000; includeSubdomains"
+
+        # Enable cross-site filter (XSS) and tell browser to block detected attacks
+        X-XSS-Protection "1; mode=block; report=https://aginmo.report-uri.com/r/d/xss/enforce"
+
+        # Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+        X-Content-Type-Options "nosniff"
+
+        # Disallow the site to be rendered within a frame (clickjacking protection)
+        X-Frame-Options "SAMEORIGIN"
+
+        # Only send full http referer on same origin
+        Referrer-Policy "same-origin"
+
+        # Expect Certificate Transparency
+        Expect-CT "max-age=86400, enforce, report-uri=\"https://aginmo.report-uri.com/r/d/ct/enforce\""
+
+        # Expect OSCP must-staple certificate
+        Expect-Staple "max-age=86400; report-uri=\"https://aginmo.report-uri.com/r/d/staple/enforce\""
+
+        # Let's Encrypt HKPK + Let's Encrypt Backup
+        Public-Key-Pins "pin-sha256=\"YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=\"; pin-sha256=\"sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=\"; max-age=86400; includeSubDomains; report-uri=\"https://aginmo.report-uri.com/r/d/hpkp/enforce\""
+
+        # CSP
+       Content-Security-Policy "style-src 'self' 'unsafe-inline'; report-uri https://aginmo.report-uri.com/r/d/csp/enforce"
+    }
+ 
+    root /var/www/report.chatsphere.de
+    
+    fastcgi / /run/php/php7.0-fpm.sock php
+    
+    gzip
+    
+    errors stderr {
+        400 /usr/share/caddy/errors/HTTP400.html
+        401 /usr/share/caddy/errors/HTTP401.html
+        403 /usr/share/caddy/errors/HTTP403.html
+        404 /usr/share/caddy/errors/HTTP404.html
+        500 /usr/share/caddy/errors/HTTP500.html
+        501 /usr/share/caddy/errors/HTTP501.html
+        502 /usr/share/caddy/errors/HTTP502.html
+        503 /usr/share/caddy/errors/HTTP503.html
+        * /usr/share/caddy/errors/HTTP503.html
+    }
+    
+    log / stdout "[{when_iso}] \"{method} report.chatsphere.de{uri} {proto}\" {status} {size}"
+    
+    timeouts {
+        read 2m
+        header 30s
+        write none
+        idle 2h
+    }
+}
+
+# JETTY on Port 
+api.chatsphere.de {
+   
+    # Let's Encrypt TLS Certificate
+    tls niklas@seyfarth.de {
+            alpn h2 # Allow only HTTP 2.0
+            curves X25519 p521 p384 p256
+            ciphers ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-CBC-SHA
+            must_staple
+    }
+
+    header / {
+        # Enable HTTP Strict Transport Security (HSTS) to force clients to always
+        # connect via HTTPS (do not use if only testing)
+        Strict-Transport-Security "max-age=31536000; includeSubdomains"
+
+        # Enable cross-site filter (XSS) and tell browser to block detected attacks
+        X-XSS-Protection "1; mode=block; report=https://aginmo.report-uri.com/r/d/xss/enforce"
+
+        # Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+        X-Content-Type-Options "nosniff"
+
+        # Disallow the site to be rendered within a frame (clickjacking protection)
+        X-Frame-Options "SAMEORIGIN"
+
+        # Only send full http referer on same origin
+        Referrer-Policy "same-origin"
+
+        # Expect Certificate Transparency
+        Expect-CT "max-age=86400, enforce, report-uri=\"https://aginmo.report-uri.com/r/d/ct/enforce\""
+
+        # Expect OSCP must-staple certificate
+        Expect-Staple "max-age=86400; report-uri=\"https://aginmo.report-uri.com/r/d/staple/enforce\""
+
+        # Let's Encrypt HKPK + Let's Encrypt Backup
+        Public-Key-Pins "pin-sha256=\"YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=\"; pin-sha256=\"sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=\"; max-age=86400; includeSubDomains; report-uri=\"https://aginmo.report-uri.com/r/d/hpkp/enforce\""
+
+        # CSP
+        Content-Security-Policy "style-src 'unsafe-inline' cdn.jsdelivr.net 'self'; script-src cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval' 'self'; worker-src blob:; report-uri https://aginmo.report-uri.com/r/d/csp/enforce"
+    }
+
+    cors / {
+    	origin https://chatsphere.de
+    	methods GET,POST,OPTIONS
+    	max_age 86400
+    }
+ 
+    proxy / localhost:6060 {
+    	fail_timeout 5s
+    	max_fails 1
+    	max_conns 0
+    	#health_check
+    	transparent
+    	websocket
+    }
+    
+    gzip
+    
+    errors stderr {
+        400 /usr/share/caddy/errors/HTTP400.html
+        401 /usr/share/caddy/errors/HTTP401.html
+        403 /usr/share/caddy/errors/HTTP403.html
+        404 /usr/share/caddy/errors/HTTP404.html
+        500 /usr/share/caddy/errors/HTTP500.html
+        501 /usr/share/caddy/errors/HTTP501.html
+        502 /usr/share/caddy/errors/HTTP502.html
+        503 /usr/share/caddy/errors/HTTP503.html
+        * /usr/share/caddy/errors/HTTP503.html
+    }
+    
+    log / stdout "[{when_iso}] \"{method} api.chatsphere.de{uri} {proto}\" {status} {size}"
+}
+
+# Ory Hydra on Port 4444 
+auth.chatsphere.de {
+   
+    # Let's Encrypt TLS Certificate
+    tls niklas@seyfarth.de {
+            alpn h2 # Allow only HTTP 2.0
+            curves X25519 p521 p384 p256
+            ciphers ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-CBC-SHA
+            must_staple
+    }
+
+    header / {
+        # Enable HTTP Strict Transport Security (HSTS) to force clients to always
+        # connect via HTTPS (do not use if only testing)
+        Strict-Transport-Security "max-age=31536000; includeSubdomains"
+
+        # Enable cross-site filter (XSS) and tell browser to block detected attacks
+        X-XSS-Protection "1; mode=block; report=https://aginmo.report-uri.com/r/d/xss/enforce"
+
+        # Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+        X-Content-Type-Options "nosniff"
+
+        # Disallow the site to be rendered within a frame (clickjacking protection)
+        X-Frame-Options "SAMEORIGIN"
+
+        # Only send full http referer on same origin
+        Referrer-Policy "same-origin"
+
+        # Expect Certificate Transparency
+        Expect-CT "max-age=86400, enforce, report-uri=\"https://aginmo.report-uri.com/r/d/ct/enforce\""
+
+        # Expect OSCP must-staple certificate
+        Expect-Staple "max-age=86400; report-uri=\"https://aginmo.report-uri.com/r/d/staple/enforce\""
+
+        # Let's Encrypt HKPK + Let's Encrypt Backup
+        Public-Key-Pins "pin-sha256=\"YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=\"; pin-sha256=\"sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=\"; max-age=86400; includeSubDomains; report-uri=\"https://aginmo.report-uri.com/r/d/hpkp/enforce\""
+
+        # CSP
+        Content-Security-Policy "style-src 'unsafe-inline' ; report-uri https://aginmo.report-uri.com/r/d/csp/enforce"
+    }
+
+    cors / chatsphere.de {
+    	origin https://auth.chatsphere.de
+    	methods GET,POST
+    	max_age 86400
+    }
+ 
+    proxy / localhost:4444 {
+    	fail_timeout 5s
+    	max_fails 1
+    	max_conns 0
+    	health_check /health/ready
+    	transparent
+	#insecure_skip_verify
+    }
+    
+    gzip
+    
+    errors stderr {
+        400 /usr/share/caddy/errors/HTTP400.html
+        401 /usr/share/caddy/errors/HTTP401.html
+        403 /usr/share/caddy/errors/HTTP403.html
+        404 /usr/share/caddy/errors/HTTP404.html
+        500 /usr/share/caddy/errors/HTTP500.html
+        501 /usr/share/caddy/errors/HTTP501.html
+        502 /usr/share/caddy/errors/HTTP502.html
+        503 /usr/share/caddy/errors/HTTP503.html
+        * /usr/share/caddy/errors/HTTP503.html
+    }
+    
+    log / stdout "[{when_iso}] \"{method} auth.chatsphere.de{uri} {proto}\" {status} {size}"
+}
+
+# NodeJS-Server in Port 3000
+docs.chatsphere.de {
+   
+    # Let's Encrypt TLS Certificate
+    tls niklas@seyfarth.de {
+            alpn h2 # Allow only HTTP 2.0
+            curves X25519 p521 p384 p256
+            ciphers ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-ECDSA-WITH-CHACHA20-POLY1305 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-WITH-CHACHA20-POLY1305 ECDHE-ECDSA-AES256-CBC-SHA
+            must_staple
+    }
+
+    redir 307 {
+	if {path} is /
+	/ /graphiql
+    }
+
+    header / {
+        # Enable HTTP Strict Transport Security (HSTS) to force clients to always
+        # connect via HTTPS (do not use if only testing)
+        Strict-Transport-Security "max-age=31536000; includeSubdomains"
+
+        # Enable cross-site filter (XSS) and tell browser to block detected attacks
+        X-XSS-Protection "1; mode=block; report=https://aginmo.report-uri.com/r/d/xss/enforce"
+
+        # Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+        X-Content-Type-Options "nosniff"
+
+        # Disallow the site to be rendered within a frame (clickjacking protection)
+        X-Frame-Options "SAMEORIGIN"
+
+        # Only send full http referer on same origin
+        Referrer-Policy "same-origin"
+
+        # Expect Certificate Transparency
+        Expect-CT "max-age=86400, enforce, report-uri=\"https://aginmo.report-uri.com/r/d/ct/enforce\""
+
+        # Expect OSCP must-staple certificate
+        Expect-Staple "max-age=86400; report-uri=\"https://aginmo.report-uri.com/r/d/staple/enforce\""
+
+        # Let's Encrypt HKPK + Let's Encrypt Backup
+        Public-Key-Pins "pin-sha256=\"YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=\"; pin-sha256=\"sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=\"; max-age=86400; includeSubDomains; report-uri=\"https://aginmo.report-uri.com/r/d/hpkp/enforce\""
+
+        # CSP
+        Content-Security-Policy "style-src unpkg.com cdn.jsdelivr.net 'unsafe-inline'; script-src cdn.jsdelivr.net unpkg.com 'unsafe-inline'; worker-src 'self'; report-uri https://aginmo.report-uri.com/r/d/csp/enforce" 
+    }
+    
+    proxy / localhost:3000 {
+    	fail_timeout 5s
+    	max_fails 1
+    	max_conns 0
+    	#health_check
+    	transparent
+    }
+
+    gzip
+    
+    errors stderr {
+        400 /usr/share/caddy/errors/HTTP400.html
+        401 /usr/share/caddy/errors/HTTP401.html
+        403 /usr/share/caddy/errors/HTTP403.html
+        404 /usr/share/caddy/errors/HTTP404.html
+        500 /usr/share/caddy/errors/HTTP500.html
+        501 /usr/share/caddy/errors/HTTP501.html
+        502 /usr/share/caddy/errors/HTTP502.html
+        503 /usr/share/caddy/errors/HTTP503.html
+        * /usr/share/caddy/errors/HTTP503.html
+    }
+    
+    log / stdout "[{when_iso}] \"{method} docs.chatsphere.de{uri} {proto}\" {status} {size}"
+}

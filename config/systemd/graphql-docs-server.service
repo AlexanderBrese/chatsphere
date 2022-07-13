@@ -1,0 +1,14 @@
+[Unit]
+Description=Server providing GraphQL schema documentation
+After=network-online.target
+
+[Service]
+User=chatsphere
+Group=chatsphere
+WorkingDirectory=/home/chatsphere/docs.chatsphere.de
+ExecStartPre=/usr/bin/yarn install
+ExecStart=/usr/bin/yarn start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

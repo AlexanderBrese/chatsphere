@@ -1,0 +1,23 @@
+extend type Mutation {
+  # Adds a private chat to the chat list
+  createPrivateChat(createPrivateChatInput: CreatePrivateChatInput!): PrivateChat
+}
+# Input data for creating a private chat
+input CreatePrivateChatInput {
+  # The private chat's participant's username
+  participantUsername: String!
+}
+
+# A private chat entity
+type PrivateChat implements Chat {
+  # The private chat's ID
+  id: Int!
+  # The private chat's participants
+  participants: [Participant!]!
+  # The private chat's message log sorted by Date in ascending order
+  log: [Message]
+  # The private chat's notification settings
+  notify: Notification!
+  # The private chat's stamp
+  stamp: ChatStamp
+}

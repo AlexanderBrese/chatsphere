@@ -1,0 +1,27 @@
+---
+password:
+  pepper: "(,i^qsP<v,>G"
+  duration: 100
+  memory: 131072
+  parallelism: 2
+database:
+  url: "jdbc:mariadb://localhost:3306/${database.database}"
+  database: "chatsphere"
+  username: "chatsphere"
+  password: "QJUE2TiaxoovgqCV"
+pushnotifications:
+  # Generated via `web-push generate-vapid-keys`
+  publickey: "BK1e-qBUMkTtqUlnmi9qJAvQioS98B66bo9xQQel79gS4IacpCFCZ67mIhvGPjszP3zcCdX01eKf2JMwv-q3FhY"
+  privatekey: "9oZLuG9CzgWFi8O4DHapMrDq-pv9Bz38uCm40jycngQ"
+webstorage:
+  scheme: "https"
+  domain: "cdn.chatsphere.de"
+  downloadUrl: "${webstorage.scheme}://${webstorage.domain}/{0}/{1}"
+  hashingAlgorithm: "de.chatsphere.feature.file.hash.Sha256HashingAlgorithm"
+  workingDirectory: "/var/www/cdn.chatsphere.de/"
+mimetypes:
+  video: ["video/mp4", "video/webm"]
+  picture: ["image/jpg", "image/jpeg", "image/gif", "image/png"]
+  document: ["application/pdf"]
+  audio: ["audio/wav", "audio/mpeg"]
+---

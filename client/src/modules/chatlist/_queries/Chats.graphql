@@ -1,0 +1,24 @@
+query chats {
+  account {
+    chats {
+      id
+      stamp{
+        displayName
+        iconUrl
+        lastMessage{
+          id
+          author{
+            displayName
+            status
+            avatarUrl
+          }
+          updatedAt
+          text
+        }
+      }
+      notify{
+        push
+      }
+    }
+  }
+}

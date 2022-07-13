@@ -1,0 +1,24 @@
+query search($input: String!) {
+
+	# Get all chats (matching that name)
+	searchChat(name: $input) {
+    id
+    stamp {
+      iconUrl
+      displayName
+    }
+  }
+
+  # Get all contacts with their names
+  account {
+    contacts {
+			nickname
+      user {
+        username
+				displayName
+        status
+        avatarUrl
+      }
+    }
+  }
+}

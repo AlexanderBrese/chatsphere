@@ -1,0 +1,26 @@
+extend type Query {
+  # Returns an audio message by ID
+  audioMessage(id: Int!): AudioMessage
+}
+
+extend type Mutation {
+  # Adds an audio message to a chat
+  createAudioMessage(createMessageInput: CreateMessageInput!): AudioMessage
+
+  # Updates an audio message
+  updateAudioMessage(updateMessageInput: UpdateMessageInput!): Boolean
+}
+
+# An audio message entity
+type AudioMessage implements Message {
+  # The audio message's ID
+  id: Int!
+  # The audio messages' author
+  author: User!
+  # The date when the audio message was updated
+  updatedAt: Date
+  # The audio message's description
+  text: String!
+  # The audio message's audio URL
+  url: String!
+}

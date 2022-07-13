@@ -1,0 +1,10 @@
+concurrent = 8
+check_interval = 0
+
+[[runners]]
+  name = "chatsphere-live-system"
+  url = "https://git.scc.kit.edu/"
+  token = "--insert your token here--"
+  executor = "shell"
+  limit = 0
+  [runners.cache]

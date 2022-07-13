@@ -1,0 +1,5 @@
+query login($loginInput: LoginInput) {
+  login(loginInput: $loginInput) {
+    token
+  }
+}

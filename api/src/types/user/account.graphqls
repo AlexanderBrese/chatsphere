@@ -1,0 +1,84 @@
+extend type Query {
+  # Checks if the username is taken
+  usernameTaken(username: String!): Boolean
+  # Logs in an account
+  login(loginInput: LoginInput): AuthenticationPayload
+  # Logs out an account
+  logout: Boolean
+  # Returns the current account
+  account: Account
+}
+
+extend type Mutation {
+  # Changes the password of an account
+  updatePassword(updatePasswordInput: UpdatePasswordInput!): Boolean
+  # Changes the email address of an account
+  updateEmail(updateEmailInput: UpdateEmailInput): Boolean
+  # Changes the global notification settings of an account
+  updateNotificationSettings(updateNotificationInput: UpdateNotificationInput!): Boolean
+  # Creates an account
+  createAccount(createAccountInput: CreateAccountInput): AuthenticationPayload
+}
+
+#extend type Subscription {
+#  #  Subscription fires on every notification for any of the messages with the id as recipient
+#  notified(id: ID): Message
+#}
+
+# Input data for login an account
+input LoginInput {
+  # The username
+  username: Username!
+  # The password
+  password: Password!
+}
+
+# Input data for updating an account's password
+input UpdatePasswordInput {
+  # The new password
+  password: Password!
+}
+
+# Input data for updating an account's email address
+input UpdateEmailInput {
+  # The new email address
+  email: Email!
+}
+
+# Input data for creating an account
+input CreateAccountInput {
+  # The email address
+  email: Email!
+  # The username
+  username: Username!
+  # The password
+  password: Password!
+}
+
+# Input data for updating an account's global notification settings
+input UpdateNotificationInput {
+  # The notification preference
+  notify: NotificationInput!
+}
+
+# An authentication payload entity
+type AuthenticationPayload {
+  # The JWT used to authenticate
+  token: String
+}
+
+# An account entity
+type Account {
+  # The account's email adress
+  email: String!
+  # The account's user
+  user: User!
+  # The account's contacts
+  contacts: [Contact]
+  # The account's blocked contacts
+  blocked: [Contact]
+  # The account's participated chats
+  chats: [Chat]
+  # The account's global notification settings
+  notify: Notification
+}

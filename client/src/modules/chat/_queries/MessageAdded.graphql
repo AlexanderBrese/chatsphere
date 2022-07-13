@@ -1,0 +1,19 @@
+subscription messageAdded($subscriptionInput: SubscriptionInput!) {
+  messageAdded(subscriptionInput: $subscriptionInput) {
+    ... on MessageAddedEvent {
+      message {
+        id
+        author {
+          username
+          displayName
+          status
+          avatarUrl
+        }
+        updatedAt
+        text
+      }
+    }
+    sender
+    recipients
+  }
+}

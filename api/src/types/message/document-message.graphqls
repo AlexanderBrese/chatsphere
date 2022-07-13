@@ -1,0 +1,26 @@
+extend type Query {
+  # Returns a document message by ID
+  documentMessage(id: Int!): DocumentMessage
+}
+
+extend type Mutation {
+  # Adds a document message to a chat
+  createDocumentMessage(createMessageInput: CreateMessageInput!): DocumentMessage
+
+  # Updates a document message
+  updateDocumentMessage(updateMessageInput: UpdateMessageInput!): Boolean
+}
+
+# A document message entity
+type DocumentMessage implements Message {
+  # A document message's ID
+  id: Int!
+  # A document message's author
+  author: User!
+  # The date when the document message was updated
+  updatedAt: Date
+  # The document message's description
+  text: String!
+  # The document message's document URL
+  url: String!
+}

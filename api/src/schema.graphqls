@@ -1,0 +1,67 @@
+# Dummy input data for creating a new link
+input CreateLinkInput {
+  # The link's url
+  url: String!
+  # The link's description
+  description: String!
+}
+
+# Input data for subscribing to an event bus channel (e.g. chats)
+input SubscriptionInput {
+  # The event bus channel's name
+  channelName: String!
+  # The event bus channel's ID
+  channelId: Int!
+}
+
+# TODO
+interface Event {
+  # TODO
+  sender: String!
+  # TODO
+  recipients: [String!]!
+}
+
+# A dummy link entity
+type Link {
+  # The link's ID
+  id: Int!
+  # The link's url
+  url: String!
+  # The link's description
+  description: String!
+}
+
+# A dummy event that signals that a new link was added
+type LinkAddedEvent implements Event {
+  # The newly added link
+  link: Link!
+  # The event sender
+  sender: String!
+  # The event recipients
+  recipients: [String!]!
+}
+
+# Defines queries
+type Query {
+  # Dummy query that returns all available links
+  allLinks: [Link]
+}
+
+# Defines Mutations
+type Mutation {
+  # Dummy mutation that creates a new link
+  createLink(createLinkInput: CreateLinkInput!): Link
+}
+
+# Defines Subscriptions
+type Subscription {
+  # Dummy Subscription that fires whenever a new link was added and informs subscribers
+  linkAdded(subscriptionInput: SubscriptionInput): LinkAddedEvent
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}

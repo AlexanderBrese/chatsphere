@@ -1,0 +1,9 @@
+subscription messageRemoved($subscriptionInput: SubscriptionInput!) {
+  messageRemoved(subscriptionInput: $subscriptionInput) {
+    ... on MessageRemovedEvent {
+      messageId
+    }
+    sender
+    recipients
+  }
+}

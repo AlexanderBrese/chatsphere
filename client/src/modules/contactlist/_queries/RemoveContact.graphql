@@ -1,0 +1,3 @@
+mutation removeContact($removeContactInput: RemoveContactInput!) {
+  removeContact(removeContactInput: $removeContactInput)
+}

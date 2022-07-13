@@ -1,0 +1,13 @@
+mutation createPlainMessage($createMessageInput: CreateMessageInput!) {
+  createPlainMessage(createMessageInput: $createMessageInput) {
+    id
+    author {
+      username
+      avatarUrl
+      displayName
+      status
+    }
+    updatedAt
+    text
+  }
+}

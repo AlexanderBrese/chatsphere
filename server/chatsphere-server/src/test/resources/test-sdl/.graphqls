@@ -1,0 +1,23 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+# Docs
+type Query {
+  # Docs
+  allLinks: [Link]
+}
+
+# Docs
+type Mutation {
+  # Docs
+  createLink(createLinkInput: CreateLinkInput!): Link
+}
+
+# Docs
+type Subscription {
+  # Docs
+  linkAdded(subscriptionInput: SubscriptionInput): LinkAddedEvent
+}

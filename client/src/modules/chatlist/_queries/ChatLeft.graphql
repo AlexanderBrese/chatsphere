@@ -1,0 +1,15 @@
+subscription chatLeft {
+  chatLeft {
+    ... on ChatLeftEvent {
+      chat {
+        id
+        stamp{
+          displayName
+          iconUrl
+        }
+      }
+    }
+    sender
+    recipients
+  }
+}
